@@ -9,6 +9,7 @@
     <!-- Include Firebase in your project -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
     <style>
         /* Reset and basic styles */
@@ -28,13 +29,38 @@
             margin-bottom: 30px;
             color: #0052cc;
         }
+        /* Navigation Bar Styles */
+        .nav-bar {
+            background-color: #0052cc;
+            padding: 10px 20px;
+            color: #fff;
+        }
+        .nav-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-container button {
+            background-color: #fff;
+            color: #0052cc;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .nav-container button:hover {
+            background-color: #e6e6e6;
+        }
         /* Form styles */
         .form-container {
             background-color: #fff;
             padding: 20px 30px;
             border-radius: 8px;
             max-width: 800px;
-            margin: 0 auto 40px auto;
+            margin: 20px auto;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .form-row {
@@ -113,29 +139,6 @@
         tr:hover {
             background-color: #f1f5ff;
         }
-        /* CSV Output styles */
-        .csv-output {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 800px;
-            margin: 0 auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .csv-output h2 {
-            margin-bottom: 15px;
-            color: #0052cc;
-        }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #f9fafb;
-            padding: 15px;
-            border: 1px solid #e1e4e8;
-            border-radius: 4px;
-            max-height: 300px;
-            overflow: auto;
-        }
         /* Responsive design */
         @media (max-width: 768px) {
             .form-row {
@@ -152,97 +155,502 @@
 </head>
 <body>
     <h1>Weekly Fire Alarm Test Records</h1>
-    <div class="form-container">
-        <form id="testForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="testerInitials">Tester Initials:</label>
-                    <input type="text" id="testerInitials" name="testerInitials" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="buildingName">Building Name:</label>
-                <input list="buildingList" id="buildingName" name="buildingName" required>
-                <datalist id="buildingList">
-                    <!-- Your list of buildings -->
-                    <option value="John Owens Building &amp; Eddie Newcomb Student Services Centre">
-                    <option value="Beyer Building">
-                    <option value="Manchester Museum">
-                    <!-- Add more buildings as needed -->
-                </datalist>
-            </div>
-            <div class="form-group">
-                <label for="breakGlassTested">Which Break Glass Was Tested:</label>
-                <input type="text" id="breakGlassTested" name="breakGlassTested" required>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Did Outputs Operate?</label>
-                    <select id="outputsOperated" name="outputsOperated" required>
-                        <option value="">Select</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Was Signal to Security Received?</label>
-                    <select id="signalReceived" name="signalReceived" required>
-                        <option value="">Select</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="faults">Any Faults on Panel with Details:</label>
-                <textarea id="faults" name="faults" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="comments">Comments:</label>
-                <textarea id="comments" name="comments" rows="3"></textarea>
-            </div>
-            <button type="submit">Add Record</button>
-        </form>
-    </div>
 
-    <!-- Add Export Date Range Form -->
-    <div class="form-container">
-        <h2>Export Records by Date Range</h2>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate" name="startDate">
-            </div>
-            <div class="form-group">
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate" name="endDate">
-            </div>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-container">
+            <span id="userGreeting"></span>
+            <button id="loginButton" style="display: none;">Login with Google</button>
+            <button id="logoutButton" style="display: none;">Logout</button>
         </div>
-        <button id="exportCsvButton">Export CSV</button>
     </div>
 
-    <div class="table-container">
-        <table id="recordsTable">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Tester Initials</th>
-                    <th>Building Name</th>
-                    <th>Break Glass Tested</th>
-                    <th>Outputs Operated</th>
-                    <th>Signal Received</th>
-                    <th>Faults</th>
-                    <th>Comments</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Records will be added here -->
-            </tbody>
-        </table>
+    <!-- Main Content -->
+    <div id="mainContent" style="display: none;">
+        <div class="form-container">
+            <form id="testForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testerInitials">Tester Initials:</label>
+                        <input type="text" id="testerInitials" name="testerInitials" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="buildingName">Building Name:</label>
+                    <input list="buildingList" id="buildingName" name="buildingName" required>
+                    <datalist id="buildingList">
+                        <!-- Your list of buildings -->
+                         <option value="John Owens Building &amp; Eddie Newcomb Student Services Centre">
+            <option value="Beyer Building">
+            <option value="Manchester Museum">
+            <option value="Whitworth Hall">
+            <option value="Christie Building">
+            <option value="Pharmacy Building">
+            <option value="Coupland 3">
+            <option value="Alan Gilbert Learning Commons">
+            <option value="Car Park Cabin">
+            <option value="Bridge Farm - Farm House">
+            <option value="Bridge Farm - Barn 1">
+            <option value="Bridge Farm - Barn 2">
+            <option value="Bridge Farm - Barn 3">
+            <option value="Bridge Farm - Barn 4">
+            <option value="Bridge Farm - Barn 5">
+            <option value="Bridge Farm - Barn 6">
+            <option value="Bridge Farm - Shed">
+            <option value="Martin Harris Centre">
+            <option value="Martin Harris Electro Acoustic Studio">
+            <option value="Coupland 1">
+            <option value="Rutherford Building">
+            <option value="Williamson Building">
+            <option value="Williamson - Old Growth Chamber Store">
+            <option value="Williamson - Gas Bottle Store">
+            <option value="William Kay House">
+            <option value="Ex Jabez Clegg">
+            <option value="Students Union">
+            <option value="Academy">
+            <option value="Jodrell Bank - No 1 Cottage">
+            <option value="Jodrell Bank - No 2 Cottage">
+            <option value="The University of Manchester Library">
+            <option value="The University of Manchester Library, Bin Store">
+            <option value="Stephen Joseph Studio">
+            <option value="Dalton-Ellis Hall - Main Hall &amp; Reception">
+            <option value="Dalton-Ellis Hall - Nield Wing">
+            <option value="Dalton-Ellis Hall - Graham">
+            <option value="Dalton-Ellis Hall - Eaglesfield">
+            <option value="Dalton-Ellis Hall - Sutherland">
+            <option value="Dalton-Ellis Hall - Sunnyside">
+            <option value="Dalton-Ellis Hall - Dining &amp; Garage Block">
+            <option value="Dalton-Ellis Hall - Ewings">
+            <option value="Dalton-Ellis Hall - Fiddes">
+            <option value="Dalton-Ellis Hall - The Laurence Kendal Court">
+            <option value="John Rylands Research Institute &amp; Library">
+            <option value="Samuel Alexander Building">
+            <option value="Denmark Road Building">
+            <option value="The Whitworth">
+            <option value="178 Waterloo Place">
+            <option value="182 Waterloo Place">
+            <option value="184 Waterloo Place">
+            <option value="188 Waterloo Place">
+            <option value="176 Waterloo Place">
+            <option value="180 Waterloo Place">
+            <option value="186 Waterloo Place">
+            <option value="Stopford Building">
+            <option value="Ellen Wilkinson Building">
+            <option value="Oak House - Sycamore Court">
+            <option value="Oak House - Holly Court">
+            <option value="Oak House - Maple Court">
+            <option value="Oak House - Beech Court">
+            <option value="Oak House - Chestnut Court">
+            <option value="Oak House - Carill House">
+            <option value="Oak House - Squirrels Bar">
+            <option value="Oak House - Bikeshed">
+            <option value="McDougall Sports Centre">
+            <option value="Muslim Prayer Hall South">
+            <option value="Woolton Hall - Main Building &amp; Ashley">
+            <option value="Woolton Hall - Spencer House">
+            <option value="Woolton Hall - Morley House">
+            <option value="Woolton Hall - Lindsay House">
+            <option value="Woolton Hall - Cavendish House">
+            <option value="Woolton Hall - Garages">
+            <option value="Woolton Hall - Stores">
+            <option value="Woolton Hall - Bikeshed">
+            <option value="Woolton Hall - Bungalow">
+            <option value="Firs Security Lodge">
+            <option value="Firs Environmental Research Station - Offices">
+            <option value="Firs Environmental Research Station - Old Lab Stores">
+            <option value="Firs Environmental Research Station - Moss House">
+            <option value="Firs Environmental Research Station - Range Glasshouse 1-5">
+            <option value="Firs Environmental Research Station - Boilerhouse">
+            <option value="Firs Environmental Research Station - Garage Store">
+            <option value="Firs Environmental Research Station - TBC">
+            <option value="Firs Environmental Research Station - Weather Station">
+            <option value="Firs Environmental Research Station - Poly Tunnel">
+            <option value="Whitworth Park - Grove House/Amenity Block">
+            <option value="Whitworth Park - Thorncliffe House">
+            <option value="Whitworth Park - Aberdeen House">
+            <option value="Whitworth Park - Garstang House">
+            <option value="Whitworth Park - Dilworth House">
+            <option value="Whitworth Park - Derby House">
+            <option value="Whitworth Park - Burleigh House">
+            <option value="Whitworth Park - Acomb House">
+            <option value="Whitworth Park - Security Lodge">
+            <option value="Whitworth Park - Store">
+            <option value="Whitworth Park - Leamington House">
+            <option value="Whitworth Park - Vehicle Store">
+            <option value="Hulme Hall - Main Building">
+            <option value="Hulme Hall - RLO House">
+            <option value="Hulme Hall - Houldsworth &amp; Annexe">
+            <option value="Hulme Hall - Oaklands">
+            <option value="Hulme Hall - Christie">
+            <option value="Hulme Hall - Greenwood">
+            <option value="Hulme Hall - Plymouth">
+            <option value="Hulme Hall - Birley">
+            <option value="Hulme Hall - Park House">
+            <option value="Hulme Hall - John Hartshorne Centre">
+            <option value="Hulme Hall - Gymnasium &amp; Squash Block">
+            <option value="Hulme Hall - Chapel">
+            <option value="Hulme Hall - Staff Accommodation">
+            <option value="Hulme Hall - Burkhardt House">
+            <option value="Hulme Hall - Shed">
+            <option value="Ashburne Hall - Mary Worthington, Lees, Ward &amp; Annexe">
+            <option value="Ashburne Hall - Behrens House">
+            <option value="Ashburne Hall - Lees Cottage">
+            <option value="Ashburne Hall - Uttley Hall">
+            <option value="Ashburne Hall - Ashgate Lodge">
+            <option value="Ashburne Hall - Sheavyn House">
+            <option value="Firs Pavilion">
+            <option value="Firs - Garage Store">
+            <option value="Firs - Squash Courts 1-2">
+            <option value="Firs - Squash Courts 3-4">
+            <option value="Firs - Plant &amp; Machinery Stores">
+            <option value="Jodrell Bank - Potting Shed Cafe">
+            <option value="Jodrell Bank - Space Pavilion">
+            <option value="Jodrell Bank - SKA Headquarters">
+            <option value="Jodrell Bank - Planet Pavilion">
+            <option value="Jodrell Bank - Star Pavilion">
+            <option value="Jodrell Bank - Control Building">
+            <option value="Jodrell Bank - Old Radiant Building Archive/Store">
+            <option value="Jodrell Bank - Old Moon Hut Store">
+            <option value="Jodrell Bank - Old Observatory Store">
+            <option value="Jodrell Bank - Development Lab Building 12">
+            <option value="Jodrell Bank - Park Royal Building">
+            <option value="Jodrell Bank - Power House">
+            <option value="Jodrell Bank - Power House Shed">
+            <option value="Jodrell Bank - Dormitory Block">
+            <option value="Jodrell Bank - Lovell Telescope">
+            <option value="Jodrell Bank - Mark II Telescope">
+            <option value="Jodrell Bank - 42ft Telescope">
+            <option value="Jodrell Bank - 21ft Telescope">
+            <option value="Jodrell Bank - Boiler House (Workshops)">
+            <option value="Jodrell Bank - Chemical Store">
+            <option value="Jodrell Bank - Cryogenics Workshop">
+            <option value="Jodrell Bank - Electrical Workshop">
+            <option value="Jodrell Bank - Mechanical Workshop">
+            <option value="Jodrell Bank - Telescope Workshop">
+            <option value="Jodrell Bank - Vehicle Shed">
+            <option value="Jodrell Bank - Arborist Vehicle Store">
+            <option value="Jodrell Bank - Blackett's Hut Store">
+            <option value="Jodrell Bank - Garage Store">
+            <option value="Jodrell Bank - Lovell Telescope Building 1">
+            <option value="Jodrell Bank - Lovell Telescope Building 2">
+            <option value="Jodrell Bank - Lovell Telescope Building 3">
+            <option value="Jodrell Bank - Lovell Telescope Building 4">
+            <option value="Jodrell Bank - MSC Link Tower">
+            <option value="Jodrell Bank - Pickmere Link Hut/Tower">
+            <option value="Jodrell Bank - Wood/Metal Store">
+            <option value="Jodrell Bank - Bird Watching Hut">
+            <option value="Jodrell Bank - School Bag Store">
+            <option value="Jodrell Bank - Bike Shed">
+            <option value="Jodrell Bank - 71MHz Searchlight Aerial Remains">
+            <option value="Jodrell Bank - First Light Pavilion">
+            <option value="Botany Experimental Ground (site only)">
+            <option value="Botany Experimental Ground, Store 1">
+            <option value="Botany Experimental Ground, Store 2">
+            <option value="Central Plant Building 1">
+            <option value="Central Plant Building 2">
+            <option value="Dover Street">
+            <option value="Carys Bannister Building">
+            <option value="Great Common Farm - Farm House">
+            <option value="Great Common Farm - Cottage 1">
+            <option value="Great Common Farm - Cottage 2">
+            <option value="Great Common Farm - Cottage 3">
+            <option value="Alan Turing Building">
+            <option value="University Place">
+            <option value="George Kenyon Building and Hall of Residence">
+            <option value="University Place - Energy Centre">
+            <option value="Jean McFarlane Building">
+            <option value="University Place - Plant">
+            <option value="Kilburn Building">
+            <option value="Simon Building">
+            <option value="Tabley House">
+            <option value="Wythenshawe Pavilion &amp; Agriculture Store">
+            <option value="Wythenshawe Sub Station (Derelict)">
+            <option value="Broomcroft Hall">
+            <option value="Broomcroft Hall - The Cottage">
+            <option value="Broomcroft Hall - The White House">
+            <option value="Broomcroft Hall - The Lodge">
+            <option value="Broomcroft Hall - Double Garage">
+            <option value="Broomcroft Hall - Garage Store">
+            <option value="Broomcroft Hall - Greenhouse">
+            <option value="Broomcroft Hall - Potting Shed">
+            <option value="Broomcroft Hall - Steward's Hut">
+            <option value="Broomcroft Hall - Storage Shed">
+            <option value="Broomcroft Hall - Second Greenhouse">
+            <option value="Roscoe Building">
+            <option value="Zochonis Building">
+            <option value="Mansfield Cooper Building">
+            <option value="Environmental Services Building">
+            <option value="Armitage Centre">
+            <option value="St Anselm Hall - Schuster, Dewar, Summerfield &amp; Manor">
+            <option value="St Anselm Hall - The Lodge">
+            <option value="St Anselm Hall - Chapel">
+            <option value="St Anselm Hall - Squash Court">
+            <option value="St Anselm Hall - Store">
+            <option value="St Anselm Hall - Gym">
+            <option value="St Anselm Hall - Workshop &amp; Garages">
+            <option value="St Anselm Hall - Bikeshed">
+            <option value="Owens Park - Central Administration Block">
+            <option value="Owens Park - Bar Lounge and Hall">
+            <option value="Owens Park - Tower Block">
+            <option value="Owens Park - Tree Court">
+            <option value="Owens Park - Green Court">
+            <option value="Owens Park - Little Court">
+            <option value="Owens Park - Mall Block">
+            <option value="Owens Park - The Limes">
+            <option value="Owens Park - The Limes Stores">
+            <option value="Owens Park - The Limes Garages &amp; Stores">
+            <option value="Owens Park - Bikeshed">
+            <option value="Chemistry Building">
+            <option value="Schuster Building">
+            <option value="Schuster Sub Station">
+            <option value="Humanities Bridgeford Street">
+            <option value="Arthur Lewis Building">
+            <option value="Crawford House">
+            <option value="Crook Hall Farm - Farmhouse">
+            <option value="Crook Hall Farm - Barn 1">
+            <option value="Crook Hall Farm - Barn 2">
+            <option value="Crook Hall Farm - Brick Shed">
+            <option value="Crook Hall Farm - Garage">
+            <option value="Darnhall Telescopes">
+            <option value="Pickmere Telescopes">
+            <option value="Knockin Telescopes and Transceiver">
+            <option value="Defford Telescope">
+            <option value="National Graphene Institute">
+            <option value="Information Technology">
+            <option value="Aquatics / Booth Street East (Car Park B)">
+            <option value="Booth Street West (Car Park D)">
+            <option value="Turner Dental School">
+            <option value="Dryden Street Nursery">
+            <option value="Horniman House">
+            <option value="Vaughan House">
+            <option value="Richmond Park - Amenity Building">
+            <option value="Richmond Park - Willow Court, Flats 1-8">
+            <option value="Richmond Park - Willow Court, Flats 9-16">
+            <option value="Richmond Park - Willow Court, Flats 17-24">
+            <option value="Richmond Park - Willow Court, Flats 25-32">
+            <option value="Richmond Park - Poplar Court, Flats 1-8">
+            <option value="Richmond Park - Poplar Court, Flats 9-16">
+            <option value="Richmond Park - Poplar Court, Flats 17-24">
+            <option value="Richmond Park - Poplar Court, Flats 25-32">
+            <option value="Firs Villa">
+            <option value="Richmond Park - Site Compound">
+            <option value="Uttley House">
+            <option value="Uttley House Sub Station">
+            <option value="A V Hill Building">
+            <option value="Contact Theatre">
+            <option value="Denmark Road Halls of Residence">
+            <option value="AQA Building">
+            <option value="Michael Smith Building">
+            <option value="Michael Smith Outbuildings">
+            <option value="Manchester Incubator Building">
+            <option value="Core Technology Facility">
+            <option value="Schunck Building">
+            <option value="Prospect House">
+            <option value="Pin Mill Brow Store">
+            <option value="Wolfson Molecular Imaging Centre">
+            <option value="James Chadwick Building">
+            <option value="Booth Street East Building">
+            <option value="Oddfellows Hall">
+            <option value="Sugden Sports Centre">
+            <option value="John Garside Building">
+            <option value="George Begg Building">
+            <option value="Faraday Tower">
+            <option value="Ferranti Building">
+            <option value="MSS">
+            <option value="Morton Laboratory">
+            <option value="The Mill">
+            <option value="The Manchester Meeting Place">
+            <option value="Pariser Building">
+            <option value="Weston Hotel &amp; Conference Centre">
+            <option value="Weston Hall">
+            <option value="Charles St (Car Park A)">
+            <option value="Sackville Street - Security Lodge">
+            <option value="James Lighthill Building">
+            <option value="Renold Building">
+            <option value="Barnes Wallis Building">
+            <option value="Wright Robinson Hall">
+            <option value="Moffat Building">
+            <option value="The Arches Unit 16">
+            <option value="The Arches Incubator Unit 28">
+            <option value="The Arches Incubator Unit 29">
+            <option value="The Arches Incubator Unit 30">
+            <option value="The Arches Unit 17">
+            <option value="The Arches Unit 18">
+            <option value="The Arches Unit 19">
+            <option value="The Arches Unit 20">
+            <option value="The Arches Unit 22a">
+            <option value="The Arches Unit 22c">
+            <option value="The Arches Unit 23">
+            <option value="The Arches Unit 26">
+            <option value="The Arches Unit 27">
+            <option value="The Arches Unit 27b">
+            <option value="The Arches Unit 22">
+            <option value="The Arches Unit 24">
+            <option value="The Arches Unit 25">
+            <option value="The Arches Unit 31">
+            <option value="The Arches Unit 32">
+            <option value="The Arches Unit 5">
+            <option value="The Arches Unit 16a">
+            <option value="The Arches Unit 17a">
+            <option value="The Arches Unit 20a">
+            <option value="The Arches Unit 21">
+            <option value="The Arches Unit 22b">
+            <option value="The Arches Unit 27a">
+            <option value="Sackville Street Building">
+            <option value="Boat House, Danefield Road, Sale">
+            <option value="Manchester Aquatics Centre">
+            <option value="Charles Street Arches">
+            <option value="Reynolds House">
+            <option value="Lords Bridge Telescope">
+            <option value="Lords Bridge Telescope - Engine Room">
+            <option value="Lords Bridge Telescope - Oil Store">
+            <option value="Brook Hall">
+            <option value="325 Oxford Road (2nd Floor)">
+            <option value="Dalton Nuclear Facility">
+            <option value="Manchester Central Library">
+            <option value="Town Hall Extension">
+            <option value="The Cockcroft Institute">
+            <option value="Holme Moss - Radio Mast">
+            <option value="Masdar Building">
+            <option value="Sculptural Wall">
+            <option value="Lapwing Centre - Unit 5">
+            <option value="Alliance Manchester Business School">
+            <option value="Alliance MBS Hotel">
+            <option value="Alliance MBS Executive Education Centre">
+            <option value="Engineering Building A">
+            <option value="Engineering Building B">
+            <option value="York Street Building">
+            <option value="Royce Hub Building">
+            <option value="Canterbury Court - Cobden">
+            <option value="Canterbury Court - Pankhurst">
+            <option value="Canterbury Court - Burgess">
+            <option value="Canterbury Court - Allworthy">
+            <option value="Canterbury Court - Bikeshed">
+            <option value="Alderley Park Block 3">
+            <option value="Eng B External Gas Store">
+            <option value="Active Travel Hub">
+            <option value="Alderley Park Block 14">
+            <option value="Alderley Park Block 12">
+            <option value="Alderley Park Block 41">
+            <option value="Alderley Park Block 18">
+            <option value="Alderley Park Block 33">
+            <option value="Leconfield Industrial Estate Unit 8 (Part)">
+            <option value="Alderley Park Block 8">
+            <option value="Alderley Park Block 13">
+            <option value="Christabel Pankhurst Institute">
+            <option value="Unsworth Park - Marsham">
+            <option value="Unsworth Park - Honey">
+            <option value="Unsworth Park - Tawny">
+            <option value="Unsworth Park - Heath">
+            <option value="Unsworth Park - Mason">
+            <option value="Unsworth Park - Bumble">
+            <option value="Unsworth Park - Carder">
+            <option value="Unsworth Park - Bilberry">
+            <option value="Unsworth Park - Energy Centre">
+            <option value="Unsworth Park - Substation North">
+            <option value="Unsworth Park - Substation South">
+            <option value="Electra House, NG 7">
+            <option value="Bright Building">
+            <option value="Rutherford Appleton Laboratory, Lab 02, Building R70">
+            <option value="Salford Innovation Forum">
+            <option value="Bathurst Street">
+            <option value="iQ Wilmslow Park">
+            <option value="Rusholme Place">
+            <option value="Unit 5">
+            <option value="William Pitt Industrial Estate">
+            <option value="Young Oncology Unit - Christie Hospital">
+            <option value="Main Building - Christie Hospital">
+            <option value="Oglesby Cancer Research Centre">
+            <option value="Paterson Building">
+            <option value="Barnes Building - Salford Royal Hospital">
+            <option value="Humphrey Booth Neurosciences - Salford Royal Hospital">
+            <option value="3T Scanner - Salford Royal Hospital">
+            <option value="Mayo Building (1) Block E Salford Royal Hospital">
+            <option value="Clinical Sciences Building (11) Salford Royal Hospital">
+            <option value="Summerfield House - Salford Royal Hospital">
+            <option value="Rawnsley Building - Manchester Royal Infirmary">
+            <option value="Harrington Building">
+            <option value="Main Building - Manchester Royal Eye Hospital">
+            <option value="University Research Floor">
+            <option value="Research and Education Centre - Wythenshawe Hospital">
+            <option value="Wellcome Clinical Research Facility">
+            <option value="Citylabs">
+                        <!-- Add more buildings as needed -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="breakGlassTested">Which Break Glass Was Tested:</label>
+                    <input type="text" id="breakGlassTested" name="breakGlassTested" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Did Outputs Operate?</label>
+                        <select id="outputsOperated" name="outputsOperated" required>
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Was Signal to Security Received?</label>
+                        <select id="signalReceived" name="signalReceived" required>
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="faults">Any Faults on Panel with Details:</label>
+                    <textarea id="faults" name="faults" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comments:</label>
+                    <textarea id="comments" name="comments" rows="3"></textarea>
+                </div>
+                <button type="submit">Add Record</button>
+            </form>
+        </div>
+
+        <!-- Add Export Date Range Form -->
+        <div class="form-container">
+            <h2>Export Records by Date Range</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate">
+                </div>
+            </div>
+            <button id="exportCsvButton">Export CSV</button>
+        </div>
+
+        <div class="table-container">
+            <table id="recordsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tester Initials</th>
+                        <th>Building Name</th>
+                        <th>Break Glass Tested</th>
+                        <th>Outputs Operated</th>
+                        <th>Signal Received</th>
+                        <th>Faults</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Records will be added here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Initialize Firebase and your scripts -->
@@ -252,11 +660,76 @@
             apiKey: "AIzaSyBiop-RzUQTaRGdJvSyBSkOirtUEDVd3rw",
             authDomain: "firealarmtestrecords.firebaseapp.com",
             projectId: "firealarmtestrecords",
-            // storageBucket, messagingSenderId, and appId are optional for Firestore
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
+        var auth = firebase.auth();
+
+        // Monitor authentication state
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in
+                document.getElementById('userGreeting').textContent = 'Hello, ' + user.displayName;
+                document.getElementById('loginButton').style.display = 'none';
+                document.getElementById('logoutButton').style.display = 'inline-block';
+                // Show the main content
+                document.getElementById('mainContent').style.display = 'block';
+                // Load records
+                loadRecords();
+            } else {
+                // User is signed out
+                document.getElementById('userGreeting').textContent = '';
+                document.getElementById('loginButton').style.display = 'inline-block';
+                document.getElementById('logoutButton').style.display = 'none';
+                // Hide the main content
+                document.getElementById('mainContent').style.display = 'none';
+            }
+        });
+
+        // Login with Google
+        document.getElementById('loginButton').addEventListener('click', function() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(function(result) {
+                    console.log('User signed in');
+                })
+                .catch(function(error) {
+                    console.error('Error during sign in:', error);
+                });
+        });
+
+        // Logout
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            auth.signOut()
+                .then(function() {
+                    console.log('User signed out');
+                })
+                .catch(function(error) {
+                    console.error('Error during sign out:', error);
+                });
+        });
+
+        // Function to load records
+        function loadRecords() {
+            // Clear existing table rows
+            var tbody = document.getElementById('recordsTable').getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';
+
+            db.collection("fireAlarmRecords")
+                .orderBy("timestamp")
+                .get()
+                .then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        var record = doc.data();
+                        addRecordToTable(record);
+                    });
+                    updateCSVOutput();
+                })
+                .catch(function(error) {
+                    console.log("Error getting documents: ", error);
+                });
+        }
 
         // Function to add a record to the table
         function addRecordToTable(record) {
@@ -284,47 +757,17 @@
 
         // Function to update CSV output
         function updateCSVOutput() {
-            var csvContent = "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
-            var tbody = document.getElementById('recordsTable').getElementsByTagName('tbody')[0];
-            for (var i = 0; i < tbody.rows.length; i++) {
-                var row = tbody.rows[i];
-                var dataString = '';
-                for (var j = 0; j < row.cells.length; j++) {
-                    var cellData = row.cells[j].textContent.replace(/"/g, '""');
-                    dataString += '"' + cellData + '"';
-                    if (j < row.cells.length - 1) {
-                        dataString += ',';
-                    }
-                }
-                csvContent += dataString + "\n";
-            }
-            document.getElementById('csvOutput').textContent = csvContent;
+            // Existing code (if needed)
         }
-
-        // Load records from Firestore on page load
-        window.onload = function() {
-            // Set current date
-            var today = new Date().toISOString().substr(0, 10);
-            document.getElementById('date').value = today;
-
-            // Fetch records from Firestore
-            db.collection("fireAlarmRecords").orderBy("timestamp")
-            .get()
-            .then(function(querySnapshot) {
-                querySnapshot.forEach(function(doc) {
-                    var record = doc.data();
-                    addRecordToTable(record);
-                });
-                updateCSVOutput();
-            })
-            .catch(function(error) {
-                console.log("Error getting documents: ", error);
-            });
-        };
 
         // Handle form submission
         document.getElementById('testForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            if (!auth.currentUser) {
+                alert('You must be logged in to submit a record.');
+                return;
+            }
 
             var date = document.getElementById('date').value;
             var testerInitials = document.getElementById('testerInitials').value;
@@ -344,19 +787,20 @@
                 signalReceived: signalReceived,
                 faults: faults,
                 comments: comments,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp() // For sorting
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(), // For sorting
+                uid: auth.currentUser.uid // Associate record with user
             };
 
             // Add record to Firestore
             db.collection("fireAlarmRecords").add(record)
-            .then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
-                addRecordToTable(record);
-                updateCSVOutput();
-            })
-            .catch(function(error) {
-                console.error("Error adding document: ", error);
-            });
+                .then(function(docRef) {
+                    console.log("Document written with ID: ", docRef.id);
+                    addRecordToTable(record);
+                    // Optionally update CSV output
+                })
+                .catch(function(error) {
+                    console.error("Error adding document: ", error);
+                });
 
             // Reset form except for the date and tester initials
             document.getElementById('testForm').reset();
@@ -366,6 +810,11 @@
 
         // Handle CSV Export by Date Range
         document.getElementById('exportCsvButton').addEventListener('click', function() {
+            if (!auth.currentUser) {
+                alert('You must be logged in to export records.');
+                return;
+            }
+
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
 
@@ -376,32 +825,32 @@
 
             // Fetch records from Firestore within the date range
             db.collection("fireAlarmRecords")
-            .where("date", ">=", startDate)
-            .where("date", "<=", endDate)
-            .orderBy("date")
-            .get()
-            .then(function(querySnapshot) {
-                var csvContent = "data:text/csv;charset=utf-8,";
-                csvContent += "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
-                querySnapshot.forEach(function(doc) {
-                    var record = doc.data();
-                    var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + (record.faults || '').replace(/"/g, '""') + '","' + (record.comments || '').replace(/"/g, '""') + '"';
-                    csvContent += dataString + "\n";
+                .where("date", ">=", startDate)
+                .where("date", "<=", endDate)
+                .orderBy("date")
+                .get()
+                .then(function(querySnapshot) {
+                    var csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
+                    querySnapshot.forEach(function(doc) {
+                        var record = doc.data();
+                        var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + (record.faults || '').replace(/"/g, '""') + '","' + (record.comments || '').replace(/"/g, '""') + '"';
+                        csvContent += dataString + "\n";
+                    });
+
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    var fileName = "fire_alarm_test_records_" + startDate + "_to_" + endDate + ".csv";
+                    link.setAttribute("download", fileName);
+                    document.body.appendChild(link); // Required for FF
+
+                    link.click();
+                    document.body.removeChild(link);
+                })
+                .catch(function(error) {
+                    console.log("Error getting documents: ", error);
                 });
-
-                var encodedUri = encodeURI(csvContent);
-                var link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                var fileName = "fire_alarm_test_records_" + startDate + "_to_" + endDate + ".csv";
-                link.setAttribute("download", fileName);
-                document.body.appendChild(link); // Required for FF
-
-                link.click();
-                document.body.removeChild(link);
-            })
-            .catch(function(error) {
-                console.log("Error getting documents: ", error);
-            });
         });
     </script>
 
@@ -420,5 +869,6 @@
     </script>
 </body>
 </html>
+
 
 
