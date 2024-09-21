@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weekly Fire Alarm Test Records</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset and basic styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #0052cc;
+        }
+        /* Form styles */
+        .form-container {
+            background-color: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[list],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccd0d5;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
+        input[type="text"]:focus,
+        input[list]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #0052cc;
+            box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #0052cc;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0041a8;
+        }
+        /* Table styles */
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #0052cc;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f1f5ff;
+        }
+        /* CSV Output styles */
+        .csv-output {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .csv-output h2 {
+            margin-bottom: 15px;
+            color: #0052cc;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f9fafb;
+            padding: 15px;
+            border: 1px solid #e1e4e8;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow: auto;
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            .form-group {
+                padding: 10px 0;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Weekly Fire Alarm Test Records</h1>
+    <div class="form-container">
+        <form id="testForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="testerInitials">Tester Initials:</label>
+                    <input type="text" id="testerInitials" name="testerInitials" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="buildingName">Building Name:</label>
+                <input list="buildingList" id="buildingName" name="buildingName" required>
+                <datalist id="buildingList">
+                    <!-- Your list of buildings -->
+                    <option value="John Owens Building &amp; Eddie Newcomb Student Services Centre">
+                    <option value="Beyer Building">
+                    <option value="Manchester Museum">
+                    <!-- Add more buildings as needed -->
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label for="breakGlassTested">Which Break Glass Was Tested:</label>
+                <input type="text" id="breakGlassTested" name="breakGlassTested" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Did Outputs Operate?</label>
+                    <select id="outputsOperated" name="outputsOperated" required>
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Was Signal to Security Received?</label>
+                    <select id="signalReceived" name="signalReceived" required>
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="faults">Any Faults on Panel with Details:</label>
+                <textarea id="faults" name="faults" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="3"></textarea>
+            </div>
+            <button type="submit">Add Record</button>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table id="recordsTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Tester Initials</th>
+                    <th>Building Name</th>
+                    <th>Break Glass Tested</th>
+                    <th>Outputs Operated</th>
+                    <th>Signal Received</th>
+                    <th>Faults</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Records will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="csv-output">
+        <h2>CSV Output</h2>
+        <pre id="csvOutput"></pre>
+        <button id="saveCsvButton">Save CSV</button>
+    </div>
+
+    <script>
+        var records = [];
+
+        // Load records from localStorage on page load
+        window.onload = function() {
+            if (localStorage.getItem('fireAlarmRecords')) {
+                records = JSON.parse(localStorage.getItem('fireAlarmRecords'));
+                records.forEach(function(record) {
+                    addRecordToTable(record);
+                });
+                updateCSVOutput();
+            }
+            // Set current date
+            var today = new Date().toISOString().substr(0, 10);
+            document.getElementById('date').value = today;
+        };
+
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var date = document.getElementById('date').value;
+            var testerInitials = document.getElementById('testerInitials').value;
+            var buildingName = document.getElementById('buildingName').value;
+            var breakGlassTested = document.getElementById('breakGlassTested').value;
+            var outputsOperated = document.getElementById('outputsOperated').value;
+            var signalReceived = document.getElementById('signalReceived').value;
+            var faults = document.getElementById('faults').value;
+            var comments = document.getElementById('comments').value;
+
+            var record = {
+                date: date,
+                testerInitials: testerInitials,
+                buildingName: buildingName,
+                breakGlassTested: breakGlassTested,
+                outputsOperated: outputsOperated,
+                signalReceived: signalReceived,
+                faults: faults,
+                comments: comments
+            };
+
+            records.push(record);
+            addRecordToTable(record);
+            updateCSVOutput();
+            saveRecords();
+
+            // Reset form except for the date and tester initials
+            document.getElementById('testForm').reset();
+            document.getElementById('date').value = date;
+            document.getElementById('testerInitials').value = testerInitials;
+        });
+
+        function addRecordToTable(record) {
+            var tbody = document.getElementById('recordsTable').getElementsByTagName('tbody')[0];
+            var row = tbody.insertRow();
+
+            var cellDate = row.insertCell(0);
+            var cellTesterInitials = row.insertCell(1);
+            var cellBuilding = row.insertCell(2);
+            var cellBreakGlass = row.insertCell(3);
+            var cellOutputs = row.insertCell(4);
+            var cellSignal = row.insertCell(5);
+            var cellFaults = row.insertCell(6);
+            var cellComments = row.insertCell(7);
+
+            cellDate.textContent = record.date;
+            cellTesterInitials.textContent = record.testerInitials;
+            cellBuilding.textContent = record.buildingName;
+            cellBreakGlass.textContent = record.breakGlassTested;
+            cellOutputs.textContent = record.outputsOperated;
+            cellSignal.textContent = record.signalReceived;
+            cellFaults.textContent = record.faults;
+            cellComments.textContent = record.comments;
+        }
+
+        function updateCSVOutput() {
+            var csvContent = "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
+            records.forEach(function(record) {
+                var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + record.faults.replace(/"/g, '""') + '","' + record.comments.replace(/"/g, '""') + '"';
+                csvContent += dataString + "\n";
+            });
+            document.getElementById('csvOutput').textContent = csvContent;
+        }
+
+        function saveRecords() {
+            localStorage.setItem('fireAlarmRecords', JSON.stringify(records));
+        }
+
+        document.getElementById('saveCsvButton').addEventListener('click', function() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
+            records.forEach(function(record) {
+                var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + record.faults.replace(/"/g, '""') + '","' + record.comments.replace(/"/g, '""') + '"';
+                csvContent += dataString + "\n";
+            });
+
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "fire_alarm_test_records.csv");
+            document.body.appendChild(link); // Required for FF
+
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+</body>
+</html>
+
