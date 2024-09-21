@@ -4,6 +4,12 @@
     <link rel="manifest" href="manifest.json">
     <title>Weekly Fire Alarm Test Records</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Firebase SDKs -->
+    <!-- Include Firebase in your project -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
     <style>
         /* Reset and basic styles */
         * {
@@ -203,6 +209,22 @@
         </form>
     </div>
 
+    <!-- Add Export Date Range Form -->
+    <div class="form-container">
+        <h2>Export Records by Date Range</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate">
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate">
+            </div>
+        </div>
+        <button id="exportCsvButton">Export CSV</button>
+    </div>
+
     <div class="table-container">
         <table id="recordsTable">
             <thead>
@@ -223,29 +245,84 @@
         </table>
     </div>
 
-    <div class="csv-output">
-        <h2>CSV Output</h2>
-        <pre id="csvOutput"></pre>
-        <button id="saveCsvButton">Save CSV</button>
-    </div>
-
+    <!-- Initialize Firebase and your scripts -->
     <script>
-        var records = [];
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBiop-RzUQTaRGdJvSyBSkOirtUEDVd3rw",
+            authDomain: "firealarmtestrecords.firebaseapp.com",
+            projectId: "firealarmtestrecords",
+            // storageBucket, messagingSenderId, and appId are optional for Firestore
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
 
-        // Load records from localStorage on page load
-        window.onload = function() {
-            if (localStorage.getItem('fireAlarmRecords')) {
-                records = JSON.parse(localStorage.getItem('fireAlarmRecords'));
-                records.forEach(function(record) {
-                    addRecordToTable(record);
-                });
-                updateCSVOutput();
+        // Function to add a record to the table
+        function addRecordToTable(record) {
+            var tbody = document.getElementById('recordsTable').getElementsByTagName('tbody')[0];
+            var row = tbody.insertRow();
+
+            var cellDate = row.insertCell(0);
+            var cellTesterInitials = row.insertCell(1);
+            var cellBuilding = row.insertCell(2);
+            var cellBreakGlass = row.insertCell(3);
+            var cellOutputs = row.insertCell(4);
+            var cellSignal = row.insertCell(5);
+            var cellFaults = row.insertCell(6);
+            var cellComments = row.insertCell(7);
+
+            cellDate.textContent = record.date;
+            cellTesterInitials.textContent = record.testerInitials;
+            cellBuilding.textContent = record.buildingName;
+            cellBreakGlass.textContent = record.breakGlassTested;
+            cellOutputs.textContent = record.outputsOperated;
+            cellSignal.textContent = record.signalReceived;
+            cellFaults.textContent = record.faults || '';
+            cellComments.textContent = record.comments || '';
+        }
+
+        // Function to update CSV output
+        function updateCSVOutput() {
+            var csvContent = "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
+            var tbody = document.getElementById('recordsTable').getElementsByTagName('tbody')[0];
+            for (var i = 0; i < tbody.rows.length; i++) {
+                var row = tbody.rows[i];
+                var dataString = '';
+                for (var j = 0; j < row.cells.length; j++) {
+                    var cellData = row.cells[j].textContent.replace(/"/g, '""');
+                    dataString += '"' + cellData + '"';
+                    if (j < row.cells.length - 1) {
+                        dataString += ',';
+                    }
+                }
+                csvContent += dataString + "\n";
             }
+            document.getElementById('csvOutput').textContent = csvContent;
+        }
+
+        // Load records from Firestore on page load
+        window.onload = function() {
             // Set current date
             var today = new Date().toISOString().substr(0, 10);
             document.getElementById('date').value = today;
+
+            // Fetch records from Firestore
+            db.collection("fireAlarmRecords").orderBy("timestamp")
+            .get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    var record = doc.data();
+                    addRecordToTable(record);
+                });
+                updateCSVOutput();
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+            });
         };
 
+        // Handle form submission
         document.getElementById('testForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -266,13 +343,20 @@
                 outputsOperated: outputsOperated,
                 signalReceived: signalReceived,
                 faults: faults,
-                comments: comments
+                comments: comments,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() // For sorting
             };
 
-            records.push(record);
-            addRecordToTable(record);
-            updateCSVOutput();
-            saveRecords();
+            // Add record to Firestore
+            db.collection("fireAlarmRecords").add(record)
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+                addRecordToTable(record);
+                updateCSVOutput();
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
 
             // Reset form except for the date and tester initials
             document.getElementById('testForm').reset();
@@ -280,71 +364,61 @@
             document.getElementById('testerInitials').value = testerInitials;
         });
 
-        function addRecordToTable(record) {
-            var tbody = document.getElementById('recordsTable').getElementsByTagName('tbody')[0];
-            var row = tbody.insertRow();
+        // Handle CSV Export by Date Range
+        document.getElementById('exportCsvButton').addEventListener('click', function() {
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
 
-            var cellDate = row.insertCell(0);
-            var cellTesterInitials = row.insertCell(1);
-            var cellBuilding = row.insertCell(2);
-            var cellBreakGlass = row.insertCell(3);
-            var cellOutputs = row.insertCell(4);
-            var cellSignal = row.insertCell(5);
-            var cellFaults = row.insertCell(6);
-            var cellComments = row.insertCell(7);
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
-            cellDate.textContent = record.date;
-            cellTesterInitials.textContent = record.testerInitials;
-            cellBuilding.textContent = record.buildingName;
-            cellBreakGlass.textContent = record.breakGlassTested;
-            cellOutputs.textContent = record.outputsOperated;
-            cellSignal.textContent = record.signalReceived;
-            cellFaults.textContent = record.faults;
-            cellComments.textContent = record.comments;
-        }
-
-        function updateCSVOutput() {
-            var csvContent = "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
-            records.forEach(function(record) {
-                var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + record.faults.replace(/"/g, '""') + '","' + record.comments.replace(/"/g, '""') + '"';
-                csvContent += dataString + "\n";
-            });
-            document.getElementById('csvOutput').textContent = csvContent;
-        }
-
-        function saveRecords() {
-            localStorage.setItem('fireAlarmRecords', JSON.stringify(records));
-        }
-
-        document.getElementById('saveCsvButton').addEventListener('click', function() {
-            var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
-            records.forEach(function(record) {
-                var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + record.faults.replace(/"/g, '""') + '","' + record.comments.replace(/"/g, '""') + '"';
-                csvContent += dataString + "\n";
-            });
-
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "fire_alarm_test_records.csv");
-            document.body.appendChild(link); // Required for FF
-
-            link.click();
-            document.body.removeChild(link);
-        });
-        <script>
-          if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-              navigator.serviceWorker.register('service-worker.js')
-                .then(function(registration) {
-                  console.log('Service Worker registered with scope:', registration.scope);
-                }, function(error) {
-                  console.log('Service Worker registration failed:', error);
+            // Fetch records from Firestore within the date range
+            db.collection("fireAlarmRecords")
+            .where("date", ">=", startDate)
+            .where("date", "<=", endDate)
+            .orderBy("date")
+            .get()
+            .then(function(querySnapshot) {
+                var csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "Date,Tester Initials,Building Name,Break Glass Tested,Outputs Operated,Signal Received,Faults,Comments\n";
+                querySnapshot.forEach(function(doc) {
+                    var record = doc.data();
+                    var dataString = '"' + record.date + '","' + record.testerInitials.replace(/"/g, '""') + '","' + record.buildingName.replace(/"/g, '""') + '","' + record.breakGlassTested.replace(/"/g, '""') + '","' + record.outputsOperated + '","' + record.signalReceived + '","' + (record.faults || '').replace(/"/g, '""') + '","' + (record.comments || '').replace(/"/g, '""') + '"';
+                    csvContent += dataString + "\n";
                 });
+
+                var encodedUri = encodeURI(csvContent);
+                var link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                var fileName = "fire_alarm_test_records_" + startDate + "_to_" + endDate + ".csv";
+                link.setAttribute("download", fileName);
+                document.body.appendChild(link); // Required for FF
+
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
             });
-          }
-        </script>
+        });
+    </script>
+
+    <!-- Service Worker registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }, function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
+
 
