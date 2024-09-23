@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
     <title>Weekly Fire Alarm Test Records</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,150 +14,123 @@
         /* Reset and basic styles */
         * {
             box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000;
             margin: 0;
             padding: 0;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #0052cc;
-        }
-        /* Navigation Bar Styles */
-        .nav-bar {
-            background-color: #0052cc;
+        /* Header Styles */
+        .header {
+            background-color: #660000;
             padding: 10px 20px;
             color: #fff;
+            text-align: center;
         }
-        .nav-container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-container button {
-            background-color: #fff;
-            color: #0052cc;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .nav-container button:hover {
-            background-color: #e6e6e6;
-        }
-        /* Form styles */
+        /* Form Container */
         .form-container {
-            background-color: #fff;
-            padding: 20px 30px;
-            border-radius: 8px;
+            width: 100%;
             max-width: 800px;
             margin: 20px auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-        .form-group {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        input[type="text"],
-        input[list],
-        input[type="date"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccd0d5;
-            border-radius: 4px;
-            font-size: 16px;
-            background-color: #fff;
-            color: #333;
-        }
-        input[type="text"]:focus,
-        input[list]:focus,
-        input[type="date"]:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #0052cc;
-            box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
-        }
-        button {
-            padding: 12px 20px;
-            background-color: #0052cc;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #0041a8;
-        }
-        /* Table styles */
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
+        /* Form Styles */
+        .form-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 40px;
         }
-        th, td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            text-align: left;
+        .form-table td {
+            padding: 10px;
+        }
+        .form-table label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-table input[type="text"],
+        .form-table input[type="date"],
+        .form-table textarea,
+        .form-table select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
             font-size: 14px;
         }
-        th {
-            background-color: #0052cc;
+        .form-table input[type="text"]:focus,
+        .form-table input[type="date"]:focus,
+        .form-table textarea:focus,
+        .form-table select:focus {
+            outline: none;
+            border-color: #660000;
+        }
+        /* Buttons */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            background-color: #660000;
             color: #fff;
-            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        tr:hover {
-            background-color: #f1f5ff;
+        .button-container button:hover {
+            background-color: #550000;
         }
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-            }
-            .form-group {
-                padding: 10px 0;
-            }
-            button {
+        /* Footer */
+        .footer {
+            background-color: #660000;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        /* Table Styles */
+        .records-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        .records-table th,
+        .records-table td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+        .records-table th {
+            background-color: #660000;
+            color: #fff;
+        }
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-table td {
+                display: block;
                 width: 100%;
+            }
+            .form-table td label {
+                margin-top: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Weekly Fire Alarm Test Records</h1>
+    <!-- Header -->
+    <div class="header">
+        <h1>Weekly Fire Alarm Test Records</h1>
+    </div>
 
     <!-- Navigation Bar -->
     <div class="nav-bar">
-        <div class="nav-container">
+        <div class="nav-container" style="text-align: right; padding: 10px 20px;">
             <span id="userGreeting"></span>
             <button id="loginButton" style="display: none;">Login with Google</button>
             <button id="logoutButton" style="display: none;">Logout</button>
@@ -169,471 +141,490 @@
     <div id="mainContent" style="display: none;">
         <div class="form-container">
             <form id="testForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="testerInitials">Tester Initials:</label>
-                        <input type="text" id="testerInitials" name="testerInitials" required>
-                    </div>
+                <table class="form-table">
+                    <tr>
+                        <td>
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" required>
+                        </td>
+                        <td>
+                            <label for="testerInitials">Tester Initials:</label>
+                            <input type="text" id="testerInitials" name="testerInitials" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label for="buildingName">Building Name:</label>
+                            <input list="buildingList" id="buildingName" name="buildingName" required>
+                            <datalist id="buildingList">
+                                <!-- Your list of buildings -->
+                                <option value="John Owens Building &amp; Eddie Newcomb Student Services Centre">
+                                <option value="Beyer Building">
+            			<option value="Manchester Museum">
+            			<option value="Whitworth Hall">
+            			<option value="Christie Building">
+            			<option value="Pharmacy Building">
+           		        <option value="Coupland 3">
+           			<option value="Alan Gilbert Learning Commons">
+            			<option value="Car Park Cabin">
+            			<option value="Bridge Farm - Farm House">
+            			<option value="Bridge Farm - Barn 1">
+            			<option value="Bridge Farm - Barn 2">
+            			<option value="Bridge Farm - Barn 3">
+            			<option value="Bridge Farm - Barn 4">
+            			<option value="Bridge Farm - Barn 5">
+            			<option value="Bridge Farm - Barn 6">
+            			<option value="Bridge Farm - Shed">
+            			<option value="Martin Harris Centre">
+            			<option value="Martin Harris Electro Acoustic Studio">
+            			<option value="Coupland 1">
+            			<option value="Rutherford Building">
+            			<option value="Williamson Building">
+            			<option value="Williamson - Old Growth Chamber Store">
+            			<option value="Williamson - Gas Bottle Store">
+            			<option value="William Kay House">
+            			<option value="Ex Jabez Clegg">
+            			<option value="Students Union">
+            			<option value="Academy">
+            			<option value="Jodrell Bank - No 1 Cottage">
+            			<option value="Jodrell Bank - No 2 Cottage">
+            			<option value="The University of Manchester Library">
+            			<option value="The University of Manchester Library, Bin Store">
+            			<option value="Stephen Joseph Studio">
+            			<option value="Dalton-Ellis Hall - Main Hall &amp; Reception">
+            			<option value="Dalton-Ellis Hall - Nield Wing">
+            			<option value="Dalton-Ellis Hall - Graham">
+            			<option value="Dalton-Ellis Hall - Eaglesfield">
+            			<option value="Dalton-Ellis Hall - Sutherland">
+            			<option value="Dalton-Ellis Hall - Sunnyside">
+            			<option value="Dalton-Ellis Hall - Dining &amp; Garage Block">
+            			<option value="Dalton-Ellis Hall - Ewings">
+            			<option value="Dalton-Ellis Hall - Fiddes">
+            			<option value="Dalton-Ellis Hall - The Laurence Kendal Court">
+            			<option value="John Rylands Research Institute &amp; Library">
+            			<option value="Samuel Alexander Building">
+            			<option value="Denmark Road Building">
+            			<option value="The Whitworth">
+            			<option value="178 Waterloo Place">
+            			<option value="182 Waterloo Place">
+            			<option value="184 Waterloo Place">
+            			<option value="188 Waterloo Place">
+            			<option value="176 Waterloo Place">
+            			<option value="180 Waterloo Place">
+            			<option value="186 Waterloo Place">
+           			<option value="Stopford Building">
+            			<option value="Ellen Wilkinson Building">
+            			<option value="Oak House - Sycamore Court">
+            			<option value="Oak House - Holly Court">
+            			<option value="Oak House - Maple Court">
+            			<option value="Oak House - Beech Court">
+            			<option value="Oak House - Chestnut Court">
+            			<option value="Oak House - Carill House">
+            			<option value="Oak House - Squirrels Bar">
+            			<option value="Oak House - Bikeshed">
+            			<option value="McDougall Sports Centre">
+            			<option value="Muslim Prayer Hall South">
+            			<option value="Woolton Hall - Main Building &amp; Ashley">
+            			<option value="Woolton Hall - Spencer House">
+            			<option value="Woolton Hall - Morley House">
+            			<option value="Woolton Hall - Lindsay House">
+            			<option value="Woolton Hall - Cavendish House">
+            			<option value="Woolton Hall - Garages">
+            			<option value="Woolton Hall - Stores">
+            			<option value="Woolton Hall - Bikeshed">
+            			<option value="Woolton Hall - Bungalow">
+            			<option value="Firs Security Lodge">
+            			<option value="Firs Environmental Research Station - Offices">
+            			<option value="Firs Environmental Research Station - Old Lab Stores">
+            			<option value="Firs Environmental Research Station - Moss House">
+            			<option value="Firs Environmental Research Station - Range Glasshouse 1-5">
+            			<option value="Firs Environmental Research Station - Boilerhouse">
+            			<option value="Firs Environmental Research Station - Garage Store">
+            			<option value="Firs Environmental Research Station - TBC">
+            			<option value="Firs Environmental Research Station - Weather Station">
+            			<option value="Firs Environmental Research Station - Poly Tunnel">
+            			<option value="Whitworth Park - Grove House/Amenity Block">
+            			<option value="Whitworth Park - Thorncliffe House">
+            			<option value="Whitworth Park - Aberdeen House">
+            			<option value="Whitworth Park - Garstang House">
+            			<option value="Whitworth Park - Dilworth House">
+            			<option value="Whitworth Park - Derby House">
+            			<option value="Whitworth Park - Burleigh House">
+            			<option value="Whitworth Park - Acomb House">
+            			<option value="Whitworth Park - Security Lodge">
+            			<option value="Whitworth Park - Store">
+            			<option value="Whitworth Park - Leamington House">
+            			<option value="Whitworth Park - Vehicle Store">
+            			<option value="Hulme Hall - Main Building">
+            			<option value="Hulme Hall - RLO House">
+            			<option value="Hulme Hall - Houldsworth &amp; Annexe">
+            			<option value="Hulme Hall - Oaklands">
+            			<option value="Hulme Hall - Christie">
+            			<option value="Hulme Hall - Greenwood">
+            			<option value="Hulme Hall - Plymouth">
+            			<option value="Hulme Hall - Birley">
+            			<option value="Hulme Hall - Park House">
+            			<option value="Hulme Hall - John Hartshorne Centre">
+            			<option value="Hulme Hall - Gymnasium &amp; Squash Block">
+            			<option value="Hulme Hall - Chapel">
+            			<option value="Hulme Hall - Staff Accommodation">
+            			<option value="Hulme Hall - Burkhardt House">
+            			<option value="Hulme Hall - Shed">
+            			<option value="Ashburne Hall - Mary Worthington, Lees, Ward &amp; Annexe">
+            			<option value="Ashburne Hall - Behrens House">
+            			<option value="Ashburne Hall - Lees Cottage">
+            			<option value="Ashburne Hall - Uttley Hall">
+            			<option value="Ashburne Hall - Ashgate Lodge">
+            			<option value="Ashburne Hall - Sheavyn House">
+            			<option value="Firs Pavilion">
+            			<option value="Firs - Garage Store">
+           			<option value="Firs - Squash Courts 1-2">
+            			<option value="Firs - Squash Courts 3-4">
+            			<option value="Firs - Plant &amp; Machinery Stores">
+            			<option value="Jodrell Bank - Potting Shed Cafe">
+            			<option value="Jodrell Bank - Space Pavilion">
+            			<option value="Jodrell Bank - SKA Headquarters">
+            			<option value="Jodrell Bank - Planet Pavilion">
+            			<option value="Jodrell Bank - Star Pavilion">
+            			<option value="Jodrell Bank - Control Building">
+            			<option value="Jodrell Bank - Old Radiant Building Archive/Store">
+            			<option value="Jodrell Bank - Old Moon Hut Store">
+            			<option value="Jodrell Bank - Old Observatory Store">
+            			<option value="Jodrell Bank - Development Lab Building 12">
+            			<option value="Jodrell Bank - Park Royal Building">
+            			<option value="Jodrell Bank - Power House">
+            			<option value="Jodrell Bank - Power House Shed">
+            			<option value="Jodrell Bank - Dormitory Block">
+            			<option value="Jodrell Bank - Lovell Telescope">
+            			<option value="Jodrell Bank - Mark II Telescope">
+            			<option value="Jodrell Bank - 42ft Telescope">
+            			<option value="Jodrell Bank - 21ft Telescope">
+            			<option value="Jodrell Bank - Boiler House (Workshops)">
+            			<option value="Jodrell Bank - Chemical Store">
+            			<option value="Jodrell Bank - Cryogenics Workshop">
+            			<option value="Jodrell Bank - Electrical Workshop">
+            			<option value="Jodrell Bank - Mechanical Workshop">
+            			<option value="Jodrell Bank - Telescope Workshop">
+            			<option value="Jodrell Bank - Vehicle Shed">
+           			<option value="Jodrell Bank - Arborist Vehicle Store">
+            			<option value="Jodrell Bank - Blackett's Hut Store">
+            			<option value="Jodrell Bank - Garage Store">
+            			<option value="Jodrell Bank - Lovell Telescope Building 1">
+            			<option value="Jodrell Bank - Lovell Telescope Building 2">
+            			<option value="Jodrell Bank - Lovell Telescope Building 3">
+            			<option value="Jodrell Bank - Lovell Telescope Building 4">
+            			<option value="Jodrell Bank - MSC Link Tower">
+            			<option value="Jodrell Bank - Pickmere Link Hut/Tower">
+            			<option value="Jodrell Bank - Wood/Metal Store">
+            			<option value="Jodrell Bank - Bird Watching Hut">
+            			<option value="Jodrell Bank - School Bag Store">
+            			<option value="Jodrell Bank - Bike Shed">
+            			<option value="Jodrell Bank - 71MHz Searchlight Aerial Remains">
+            			<option value="Jodrell Bank - First Light Pavilion">
+            			<option value="Botany Experimental Ground (site only)">
+            			<option value="Botany Experimental Ground, Store 1">
+            			<option value="Botany Experimental Ground, Store 2">
+            			<option value="Central Plant Building 1">
+            			<option value="Central Plant Building 2">
+            			<option value="Dover Street">
+            			<option value="Carys Bannister Building">
+            			<option value="Great Common Farm - Farm House">
+            			<option value="Great Common Farm - Cottage 1">
+            			<option value="Great Common Farm - Cottage 2">
+            			<option value="Great Common Farm - Cottage 3">
+            			<option value="Alan Turing Building">
+            			<option value="University Place">
+            			<option value="George Kenyon Building and Hall of Residence">
+            			<option value="University Place - Energy Centre">
+            			<option value="Jean McFarlane Building">
+            			<option value="University Place - Plant">
+            			<option value="Kilburn Building">
+           			<option value="Simon Building">
+            			<option value="Tabley House">
+            			<option value="Wythenshawe Pavilion &amp; Agriculture Store">
+            			<option value="Wythenshawe Sub Station (Derelict)">
+            			<option value="Broomcroft Hall">
+            			<option value="Broomcroft Hall - The Cottage">
+            			<option value="Broomcroft Hall - The White House">
+            			<option value="Broomcroft Hall - The Lodge">
+            			<option value="Broomcroft Hall - Double Garage">
+            			<option value="Broomcroft Hall - Garage Store">
+            			<option value="Broomcroft Hall - Greenhouse">
+            			<option value="Broomcroft Hall - Potting Shed">
+            			<option value="Broomcroft Hall - Steward's Hut">
+            			<option value="Broomcroft Hall - Storage Shed">
+            			<option value="Broomcroft Hall - Second Greenhouse">
+            			<option value="Roscoe Building">
+            			<option value="Zochonis Building">
+            			<option value="Mansfield Cooper Building">
+            			<option value="Environmental Services Building">
+            			<option value="Armitage Centre">
+            			<option value="St Anselm Hall - Schuster, Dewar, Summerfield &amp; Manor">
+            			<option value="St Anselm Hall - The Lodge">
+            			<option value="St Anselm Hall - Chapel">
+            			<option value="St Anselm Hall - Squash Court">
+            			<option value="St Anselm Hall - Store">
+            			<option value="St Anselm Hall - Gym">
+            			<option value="St Anselm Hall - Workshop &amp; Garages">
+            			<option value="St Anselm Hall - Bikeshed">
+            			<option value="Owens Park - Central Administration Block">
+            			<option value="Owens Park - Bar Lounge and Hall">
+            			<option value="Owens Park - Tower Block">
+            			<option value="Owens Park - Tree Court">
+            			<option value="Owens Park - Green Court">
+            			<option value="Owens Park - Little Court">
+            			<option value="Owens Park - Mall Block">
+            			<option value="Owens Park - The Limes">
+            			<option value="Owens Park - The Limes Stores">
+            			<option value="Owens Park - The Limes Garages &amp; Stores">
+            			<option value="Owens Park - Bikeshed">
+            			<option value="Chemistry Building">
+            			<option value="Schuster Building">
+            			<option value="Schuster Sub Station">
+            			<option value="Humanities Bridgeford Street">
+            			<option value="Arthur Lewis Building">
+            			<option value="Crawford House">
+            			<option value="Crook Hall Farm - Farmhouse">
+            			<option value="Crook Hall Farm - Barn 1">
+            			<option value="Crook Hall Farm - Barn 2">
+            			<option value="Crook Hall Farm - Brick Shed">
+            			<option value="Crook Hall Farm - Garage">
+            			<option value="Darnhall Telescopes">
+            			<option value="Pickmere Telescopes">
+            			<option value="Knockin Telescopes and Transceiver">
+            			<option value="Defford Telescope">
+            			<option value="National Graphene Institute">
+            			<option value="Information Technology">
+            			<option value="Aquatics / Booth Street East (Car Park B)">
+            			<option value="Booth Street West (Car Park D)">
+            			<option value="Turner Dental School">
+            			<option value="Dryden Street Nursery">
+            			<option value="Horniman House">
+            			<option value="Vaughan House">
+            			<option value="Richmond Park - Amenity Building">
+            			<option value="Richmond Park - Willow Court, Flats 1-8">
+            			<option value="Richmond Park - Willow Court, Flats 9-16">
+           			<option value="Richmond Park - Willow Court, Flats 17-24">
+            			<option value="Richmond Park - Willow Court, Flats 25-32">
+            			<option value="Richmond Park - Poplar Court, Flats 1-8">
+            			<option value="Richmond Park - Poplar Court, Flats 9-16">
+            			<option value="Richmond Park - Poplar Court, Flats 17-24">
+            			<option value="Richmond Park - Poplar Court, Flats 25-32">
+            			<option value="Firs Villa">
+            			<option value="Richmond Park - Site Compound">
+            			<option value="Uttley House">
+            			<option value="Uttley House Sub Station">
+            			<option value="A V Hill Building">
+            			<option value="Contact Theatre">
+           			<option value="Denmark Road Halls of Residence">
+            			<option value="AQA Building">
+            			<option value="Michael Smith Building">
+            			<option value="Michael Smith Outbuildings">
+            			<option value="Manchester Incubator Building">
+            			<option value="Core Technology Facility">
+            			<option value="Schunck Building">
+            			<option value="Prospect House">
+           			<option value="Pin Mill Brow Store">
+            			<option value="Wolfson Molecular Imaging Centre">
+            			<option value="James Chadwick Building">
+            			<option value="Booth Street East Building">
+            			<option value="Oddfellows Hall">
+            			<option value="Sugden Sports Centre">
+            			<option value="John Garside Building">
+            			<option value="George Begg Building">
+            			<option value="Faraday Tower">
+            			<option value="Ferranti Building">
+            			<option value="MSS">
+            			<option value="Morton Laboratory">
+            			<option value="The Mill">
+            			<option value="The Manchester Meeting Place">
+            			<option value="Pariser Building">
+            			<option value="Weston Hotel &amp; Conference Centre">
+            			<option value="Weston Hall">
+            			<option value="Charles St (Car Park A)">
+            			<option value="Sackville Street - Security Lodge">
+            			<option value="James Lighthill Building">
+            			<option value="Renold Building">
+            			<option value="Barnes Wallis Building">
+            			<option value="Wright Robinson Hall">
+            			<option value="Moffat Building">
+            			<option value="The Arches Unit 16">
+            			<option value="The Arches Incubator Unit 28">
+            			<option value="The Arches Incubator Unit 29">
+            			<option value="The Arches Incubator Unit 30">
+            			<option value="The Arches Unit 17">
+            			<option value="The Arches Unit 18">
+            			<option value="The Arches Unit 19">
+            			<option value="The Arches Unit 20">
+            			<option value="The Arches Unit 22a">
+            			<option value="The Arches Unit 22c">
+            			<option value="The Arches Unit 23">
+            			<option value="The Arches Unit 26">
+            			<option value="The Arches Unit 27">
+            			<option value="The Arches Unit 27b">
+            			<option value="The Arches Unit 22">
+            			<option value="The Arches Unit 24">
+            			<option value="The Arches Unit 25">
+            			<option value="The Arches Unit 31">
+            			<option value="The Arches Unit 32">
+            			<option value="The Arches Unit 5">
+           			<option value="The Arches Unit 16a">
+            			<option value="The Arches Unit 17a">
+            			<option value="The Arches Unit 20a">
+            			<option value="The Arches Unit 21">
+            			<option value="The Arches Unit 22b">
+            			<option value="The Arches Unit 27a">
+            			<option value="Sackville Street Building">
+            			<option value="Boat House, Danefield Road, Sale">
+            			<option value="Manchester Aquatics Centre">
+            			<option value="Charles Street Arches">
+            			<option value="Reynolds House">
+            			<option value="Lords Bridge Telescope">
+            			<option value="Lords Bridge Telescope - Engine Room">
+            			<option value="Lords Bridge Telescope - Oil Store">
+            			<option value="Brook Hall">
+            			<option value="325 Oxford Road (2nd Floor)">
+            			<option value="Dalton Nuclear Facility">
+            			<option value="Manchester Central Library">
+            			<option value="Town Hall Extension">
+            			<option value="The Cockcroft Institute">
+            			<option value="Holme Moss - Radio Mast">
+            			<option value="Masdar Building">
+            			<option value="Sculptural Wall">
+            			<option value="Lapwing Centre - Unit 5">
+            			<option value="Alliance Manchester Business School">
+            			<option value="Alliance MBS Hotel">
+            			<option value="Alliance MBS Executive Education Centre">
+            			<option value="Engineering Building A">
+            			<option value="Engineering Building B">
+            			<option value="York Street Building">
+            			<option value="Royce Hub Building">
+           			<option value="Canterbury Court - Cobden">
+            			<option value="Canterbury Court - Pankhurst">
+            			<option value="Canterbury Court - Burgess">
+            			<option value="Canterbury Court - Allworthy">
+            			<option value="Canterbury Court - Bikeshed">
+            			<option value="Alderley Park Block 3">
+            			<option value="Eng B External Gas Store">
+            			<option value="Active Travel Hub">
+            			<option value="Alderley Park Block 14">
+            			<option value="Alderley Park Block 12">
+            			<option value="Alderley Park Block 41">
+            			<option value="Alderley Park Block 18">
+            			<option value="Alderley Park Block 33">
+            			<option value="Leconfield Industrial Estate Unit 8 (Part)">
+            			<option value="Alderley Park Block 8">
+            			<option value="Alderley Park Block 13">
+            			<option value="Christabel Pankhurst Institute">
+            			<option value="Unsworth Park - Marsham">
+            			<option value="Unsworth Park - Honey">
+           			<option value="Unsworth Park - Tawny">
+            			<option value="Unsworth Park - Heath">
+            			<option value="Unsworth Park - Mason">
+            			<option value="Unsworth Park - Bumble">
+            			<option value="Unsworth Park - Carder">
+            			<option value="Unsworth Park - Bilberry">
+            			<option value="Unsworth Park - Energy Centre">
+            			<option value="Unsworth Park - Substation North">
+            			<option value="Unsworth Park - Substation South">
+            			<option value="Electra House, NG 7">
+            			<option value="Bright Building">
+            			<option value="Rutherford Appleton Laboratory, Lab 02, Building R70">
+            			<option value="Salford Innovation Forum">
+            			<option value="Bathurst Street">
+            			<option value="iQ Wilmslow Park">
+            			<option value="Rusholme Place">
+            			<option value="Unit 5">
+            			<option value="William Pitt Industrial Estate">
+            			<option value="Young Oncology Unit - Christie Hospital">
+            			<option value="Main Building - Christie Hospital">
+            			<option value="Oglesby Cancer Research Centre">
+            			<option value="Paterson Building">
+            			<option value="Barnes Building - Salford Royal Hospital">
+            			<option value="Humphrey Booth Neurosciences - Salford Royal Hospital">
+            			<option value="3T Scanner - Salford Royal Hospital">
+            			<option value="Mayo Building (1) Block E Salford Royal Hospital">
+            			<option value="Clinical Sciences Building (11) Salford Royal Hospital">
+            			<option value="Summerfield House - Salford Royal Hospital">
+            			<option value="Rawnsley Building - Manchester Royal Infirmary">
+            			<option value="Harrington Building">
+            			<option value="Main Building - Manchester Royal Eye Hospital">
+            			<option value="University Research Floor">
+            			<option value="Research and Education Centre - Wythenshawe Hospital">
+            			<option value="Wellcome Clinical Research Facility">
+            			<option value="Citylabs">
+                                <!-- Add more buildings as needed -->
+                            </datalist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label for="breakGlassTested">Which Break Glass Was Tested:</label>
+                            <input type="text" id="breakGlassTested" name="breakGlassTested" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Did Outputs Operate?</label>
+                            <select id="outputsOperated" name="outputsOperated" required>
+                                <option value="">Select</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label>Was Signal to Security Received?</label>
+                            <select id="signalReceived" name="signalReceived" required>
+                                <option value="">Select</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label for="faults">Any Faults on Panel with Details:</label>
+                            <textarea id="faults" name="faults" rows="3"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label for="comments">Comments:</label>
+                            <textarea id="comments" name="comments" rows="3"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div class="button-container">
+                    <button type="submit">Add Record</button>
                 </div>
-                <div class="form-group">
-                    <label for="buildingName">Building Name:</label>
-                    <input list="buildingList" id="buildingName" name="buildingName" required>
-                    <datalist id="buildingList">
-                        <!-- Your list of buildings -->
-                         <option value="John Owens Building &amp; Eddie Newcomb Student Services Centre">
-            <option value="Beyer Building">
-            <option value="Manchester Museum">
-            <option value="Whitworth Hall">
-            <option value="Christie Building">
-            <option value="Pharmacy Building">
-            <option value="Coupland 3">
-            <option value="Alan Gilbert Learning Commons">
-            <option value="Car Park Cabin">
-            <option value="Bridge Farm - Farm House">
-            <option value="Bridge Farm - Barn 1">
-            <option value="Bridge Farm - Barn 2">
-            <option value="Bridge Farm - Barn 3">
-            <option value="Bridge Farm - Barn 4">
-            <option value="Bridge Farm - Barn 5">
-            <option value="Bridge Farm - Barn 6">
-            <option value="Bridge Farm - Shed">
-            <option value="Martin Harris Centre">
-            <option value="Martin Harris Electro Acoustic Studio">
-            <option value="Coupland 1">
-            <option value="Rutherford Building">
-            <option value="Williamson Building">
-            <option value="Williamson - Old Growth Chamber Store">
-            <option value="Williamson - Gas Bottle Store">
-            <option value="William Kay House">
-            <option value="Ex Jabez Clegg">
-            <option value="Students Union">
-            <option value="Academy">
-            <option value="Jodrell Bank - No 1 Cottage">
-            <option value="Jodrell Bank - No 2 Cottage">
-            <option value="The University of Manchester Library">
-            <option value="The University of Manchester Library, Bin Store">
-            <option value="Stephen Joseph Studio">
-            <option value="Dalton-Ellis Hall - Main Hall &amp; Reception">
-            <option value="Dalton-Ellis Hall - Nield Wing">
-            <option value="Dalton-Ellis Hall - Graham">
-            <option value="Dalton-Ellis Hall - Eaglesfield">
-            <option value="Dalton-Ellis Hall - Sutherland">
-            <option value="Dalton-Ellis Hall - Sunnyside">
-            <option value="Dalton-Ellis Hall - Dining &amp; Garage Block">
-            <option value="Dalton-Ellis Hall - Ewings">
-            <option value="Dalton-Ellis Hall - Fiddes">
-            <option value="Dalton-Ellis Hall - The Laurence Kendal Court">
-            <option value="John Rylands Research Institute &amp; Library">
-            <option value="Samuel Alexander Building">
-            <option value="Denmark Road Building">
-            <option value="The Whitworth">
-            <option value="178 Waterloo Place">
-            <option value="182 Waterloo Place">
-            <option value="184 Waterloo Place">
-            <option value="188 Waterloo Place">
-            <option value="176 Waterloo Place">
-            <option value="180 Waterloo Place">
-            <option value="186 Waterloo Place">
-            <option value="Stopford Building">
-            <option value="Ellen Wilkinson Building">
-            <option value="Oak House - Sycamore Court">
-            <option value="Oak House - Holly Court">
-            <option value="Oak House - Maple Court">
-            <option value="Oak House - Beech Court">
-            <option value="Oak House - Chestnut Court">
-            <option value="Oak House - Carill House">
-            <option value="Oak House - Squirrels Bar">
-            <option value="Oak House - Bikeshed">
-            <option value="McDougall Sports Centre">
-            <option value="Muslim Prayer Hall South">
-            <option value="Woolton Hall - Main Building &amp; Ashley">
-            <option value="Woolton Hall - Spencer House">
-            <option value="Woolton Hall - Morley House">
-            <option value="Woolton Hall - Lindsay House">
-            <option value="Woolton Hall - Cavendish House">
-            <option value="Woolton Hall - Garages">
-            <option value="Woolton Hall - Stores">
-            <option value="Woolton Hall - Bikeshed">
-            <option value="Woolton Hall - Bungalow">
-            <option value="Firs Security Lodge">
-            <option value="Firs Environmental Research Station - Offices">
-            <option value="Firs Environmental Research Station - Old Lab Stores">
-            <option value="Firs Environmental Research Station - Moss House">
-            <option value="Firs Environmental Research Station - Range Glasshouse 1-5">
-            <option value="Firs Environmental Research Station - Boilerhouse">
-            <option value="Firs Environmental Research Station - Garage Store">
-            <option value="Firs Environmental Research Station - TBC">
-            <option value="Firs Environmental Research Station - Weather Station">
-            <option value="Firs Environmental Research Station - Poly Tunnel">
-            <option value="Whitworth Park - Grove House/Amenity Block">
-            <option value="Whitworth Park - Thorncliffe House">
-            <option value="Whitworth Park - Aberdeen House">
-            <option value="Whitworth Park - Garstang House">
-            <option value="Whitworth Park - Dilworth House">
-            <option value="Whitworth Park - Derby House">
-            <option value="Whitworth Park - Burleigh House">
-            <option value="Whitworth Park - Acomb House">
-            <option value="Whitworth Park - Security Lodge">
-            <option value="Whitworth Park - Store">
-            <option value="Whitworth Park - Leamington House">
-            <option value="Whitworth Park - Vehicle Store">
-            <option value="Hulme Hall - Main Building">
-            <option value="Hulme Hall - RLO House">
-            <option value="Hulme Hall - Houldsworth &amp; Annexe">
-            <option value="Hulme Hall - Oaklands">
-            <option value="Hulme Hall - Christie">
-            <option value="Hulme Hall - Greenwood">
-            <option value="Hulme Hall - Plymouth">
-            <option value="Hulme Hall - Birley">
-            <option value="Hulme Hall - Park House">
-            <option value="Hulme Hall - John Hartshorne Centre">
-            <option value="Hulme Hall - Gymnasium &amp; Squash Block">
-            <option value="Hulme Hall - Chapel">
-            <option value="Hulme Hall - Staff Accommodation">
-            <option value="Hulme Hall - Burkhardt House">
-            <option value="Hulme Hall - Shed">
-            <option value="Ashburne Hall - Mary Worthington, Lees, Ward &amp; Annexe">
-            <option value="Ashburne Hall - Behrens House">
-            <option value="Ashburne Hall - Lees Cottage">
-            <option value="Ashburne Hall - Uttley Hall">
-            <option value="Ashburne Hall - Ashgate Lodge">
-            <option value="Ashburne Hall - Sheavyn House">
-            <option value="Firs Pavilion">
-            <option value="Firs - Garage Store">
-            <option value="Firs - Squash Courts 1-2">
-            <option value="Firs - Squash Courts 3-4">
-            <option value="Firs - Plant &amp; Machinery Stores">
-            <option value="Jodrell Bank - Potting Shed Cafe">
-            <option value="Jodrell Bank - Space Pavilion">
-            <option value="Jodrell Bank - SKA Headquarters">
-            <option value="Jodrell Bank - Planet Pavilion">
-            <option value="Jodrell Bank - Star Pavilion">
-            <option value="Jodrell Bank - Control Building">
-            <option value="Jodrell Bank - Old Radiant Building Archive/Store">
-            <option value="Jodrell Bank - Old Moon Hut Store">
-            <option value="Jodrell Bank - Old Observatory Store">
-            <option value="Jodrell Bank - Development Lab Building 12">
-            <option value="Jodrell Bank - Park Royal Building">
-            <option value="Jodrell Bank - Power House">
-            <option value="Jodrell Bank - Power House Shed">
-            <option value="Jodrell Bank - Dormitory Block">
-            <option value="Jodrell Bank - Lovell Telescope">
-            <option value="Jodrell Bank - Mark II Telescope">
-            <option value="Jodrell Bank - 42ft Telescope">
-            <option value="Jodrell Bank - 21ft Telescope">
-            <option value="Jodrell Bank - Boiler House (Workshops)">
-            <option value="Jodrell Bank - Chemical Store">
-            <option value="Jodrell Bank - Cryogenics Workshop">
-            <option value="Jodrell Bank - Electrical Workshop">
-            <option value="Jodrell Bank - Mechanical Workshop">
-            <option value="Jodrell Bank - Telescope Workshop">
-            <option value="Jodrell Bank - Vehicle Shed">
-            <option value="Jodrell Bank - Arborist Vehicle Store">
-            <option value="Jodrell Bank - Blackett's Hut Store">
-            <option value="Jodrell Bank - Garage Store">
-            <option value="Jodrell Bank - Lovell Telescope Building 1">
-            <option value="Jodrell Bank - Lovell Telescope Building 2">
-            <option value="Jodrell Bank - Lovell Telescope Building 3">
-            <option value="Jodrell Bank - Lovell Telescope Building 4">
-            <option value="Jodrell Bank - MSC Link Tower">
-            <option value="Jodrell Bank - Pickmere Link Hut/Tower">
-            <option value="Jodrell Bank - Wood/Metal Store">
-            <option value="Jodrell Bank - Bird Watching Hut">
-            <option value="Jodrell Bank - School Bag Store">
-            <option value="Jodrell Bank - Bike Shed">
-            <option value="Jodrell Bank - 71MHz Searchlight Aerial Remains">
-            <option value="Jodrell Bank - First Light Pavilion">
-            <option value="Botany Experimental Ground (site only)">
-            <option value="Botany Experimental Ground, Store 1">
-            <option value="Botany Experimental Ground, Store 2">
-            <option value="Central Plant Building 1">
-            <option value="Central Plant Building 2">
-            <option value="Dover Street">
-            <option value="Carys Bannister Building">
-            <option value="Great Common Farm - Farm House">
-            <option value="Great Common Farm - Cottage 1">
-            <option value="Great Common Farm - Cottage 2">
-            <option value="Great Common Farm - Cottage 3">
-            <option value="Alan Turing Building">
-            <option value="University Place">
-            <option value="George Kenyon Building and Hall of Residence">
-            <option value="University Place - Energy Centre">
-            <option value="Jean McFarlane Building">
-            <option value="University Place - Plant">
-            <option value="Kilburn Building">
-            <option value="Simon Building">
-            <option value="Tabley House">
-            <option value="Wythenshawe Pavilion &amp; Agriculture Store">
-            <option value="Wythenshawe Sub Station (Derelict)">
-            <option value="Broomcroft Hall">
-            <option value="Broomcroft Hall - The Cottage">
-            <option value="Broomcroft Hall - The White House">
-            <option value="Broomcroft Hall - The Lodge">
-            <option value="Broomcroft Hall - Double Garage">
-            <option value="Broomcroft Hall - Garage Store">
-            <option value="Broomcroft Hall - Greenhouse">
-            <option value="Broomcroft Hall - Potting Shed">
-            <option value="Broomcroft Hall - Steward's Hut">
-            <option value="Broomcroft Hall - Storage Shed">
-            <option value="Broomcroft Hall - Second Greenhouse">
-            <option value="Roscoe Building">
-            <option value="Zochonis Building">
-            <option value="Mansfield Cooper Building">
-            <option value="Environmental Services Building">
-            <option value="Armitage Centre">
-            <option value="St Anselm Hall - Schuster, Dewar, Summerfield &amp; Manor">
-            <option value="St Anselm Hall - The Lodge">
-            <option value="St Anselm Hall - Chapel">
-            <option value="St Anselm Hall - Squash Court">
-            <option value="St Anselm Hall - Store">
-            <option value="St Anselm Hall - Gym">
-            <option value="St Anselm Hall - Workshop &amp; Garages">
-            <option value="St Anselm Hall - Bikeshed">
-            <option value="Owens Park - Central Administration Block">
-            <option value="Owens Park - Bar Lounge and Hall">
-            <option value="Owens Park - Tower Block">
-            <option value="Owens Park - Tree Court">
-            <option value="Owens Park - Green Court">
-            <option value="Owens Park - Little Court">
-            <option value="Owens Park - Mall Block">
-            <option value="Owens Park - The Limes">
-            <option value="Owens Park - The Limes Stores">
-            <option value="Owens Park - The Limes Garages &amp; Stores">
-            <option value="Owens Park - Bikeshed">
-            <option value="Chemistry Building">
-            <option value="Schuster Building">
-            <option value="Schuster Sub Station">
-            <option value="Humanities Bridgeford Street">
-            <option value="Arthur Lewis Building">
-            <option value="Crawford House">
-            <option value="Crook Hall Farm - Farmhouse">
-            <option value="Crook Hall Farm - Barn 1">
-            <option value="Crook Hall Farm - Barn 2">
-            <option value="Crook Hall Farm - Brick Shed">
-            <option value="Crook Hall Farm - Garage">
-            <option value="Darnhall Telescopes">
-            <option value="Pickmere Telescopes">
-            <option value="Knockin Telescopes and Transceiver">
-            <option value="Defford Telescope">
-            <option value="National Graphene Institute">
-            <option value="Information Technology">
-            <option value="Aquatics / Booth Street East (Car Park B)">
-            <option value="Booth Street West (Car Park D)">
-            <option value="Turner Dental School">
-            <option value="Dryden Street Nursery">
-            <option value="Horniman House">
-            <option value="Vaughan House">
-            <option value="Richmond Park - Amenity Building">
-            <option value="Richmond Park - Willow Court, Flats 1-8">
-            <option value="Richmond Park - Willow Court, Flats 9-16">
-            <option value="Richmond Park - Willow Court, Flats 17-24">
-            <option value="Richmond Park - Willow Court, Flats 25-32">
-            <option value="Richmond Park - Poplar Court, Flats 1-8">
-            <option value="Richmond Park - Poplar Court, Flats 9-16">
-            <option value="Richmond Park - Poplar Court, Flats 17-24">
-            <option value="Richmond Park - Poplar Court, Flats 25-32">
-            <option value="Firs Villa">
-            <option value="Richmond Park - Site Compound">
-            <option value="Uttley House">
-            <option value="Uttley House Sub Station">
-            <option value="A V Hill Building">
-            <option value="Contact Theatre">
-            <option value="Denmark Road Halls of Residence">
-            <option value="AQA Building">
-            <option value="Michael Smith Building">
-            <option value="Michael Smith Outbuildings">
-            <option value="Manchester Incubator Building">
-            <option value="Core Technology Facility">
-            <option value="Schunck Building">
-            <option value="Prospect House">
-            <option value="Pin Mill Brow Store">
-            <option value="Wolfson Molecular Imaging Centre">
-            <option value="James Chadwick Building">
-            <option value="Booth Street East Building">
-            <option value="Oddfellows Hall">
-            <option value="Sugden Sports Centre">
-            <option value="John Garside Building">
-            <option value="George Begg Building">
-            <option value="Faraday Tower">
-            <option value="Ferranti Building">
-            <option value="MSS">
-            <option value="Morton Laboratory">
-            <option value="The Mill">
-            <option value="The Manchester Meeting Place">
-            <option value="Pariser Building">
-            <option value="Weston Hotel &amp; Conference Centre">
-            <option value="Weston Hall">
-            <option value="Charles St (Car Park A)">
-            <option value="Sackville Street - Security Lodge">
-            <option value="James Lighthill Building">
-            <option value="Renold Building">
-            <option value="Barnes Wallis Building">
-            <option value="Wright Robinson Hall">
-            <option value="Moffat Building">
-            <option value="The Arches Unit 16">
-            <option value="The Arches Incubator Unit 28">
-            <option value="The Arches Incubator Unit 29">
-            <option value="The Arches Incubator Unit 30">
-            <option value="The Arches Unit 17">
-            <option value="The Arches Unit 18">
-            <option value="The Arches Unit 19">
-            <option value="The Arches Unit 20">
-            <option value="The Arches Unit 22a">
-            <option value="The Arches Unit 22c">
-            <option value="The Arches Unit 23">
-            <option value="The Arches Unit 26">
-            <option value="The Arches Unit 27">
-            <option value="The Arches Unit 27b">
-            <option value="The Arches Unit 22">
-            <option value="The Arches Unit 24">
-            <option value="The Arches Unit 25">
-            <option value="The Arches Unit 31">
-            <option value="The Arches Unit 32">
-            <option value="The Arches Unit 5">
-            <option value="The Arches Unit 16a">
-            <option value="The Arches Unit 17a">
-            <option value="The Arches Unit 20a">
-            <option value="The Arches Unit 21">
-            <option value="The Arches Unit 22b">
-            <option value="The Arches Unit 27a">
-            <option value="Sackville Street Building">
-            <option value="Boat House, Danefield Road, Sale">
-            <option value="Manchester Aquatics Centre">
-            <option value="Charles Street Arches">
-            <option value="Reynolds House">
-            <option value="Lords Bridge Telescope">
-            <option value="Lords Bridge Telescope - Engine Room">
-            <option value="Lords Bridge Telescope - Oil Store">
-            <option value="Brook Hall">
-            <option value="325 Oxford Road (2nd Floor)">
-            <option value="Dalton Nuclear Facility">
-            <option value="Manchester Central Library">
-            <option value="Town Hall Extension">
-            <option value="The Cockcroft Institute">
-            <option value="Holme Moss - Radio Mast">
-            <option value="Masdar Building">
-            <option value="Sculptural Wall">
-            <option value="Lapwing Centre - Unit 5">
-            <option value="Alliance Manchester Business School">
-            <option value="Alliance MBS Hotel">
-            <option value="Alliance MBS Executive Education Centre">
-            <option value="Engineering Building A">
-            <option value="Engineering Building B">
-            <option value="York Street Building">
-            <option value="Royce Hub Building">
-            <option value="Canterbury Court - Cobden">
-            <option value="Canterbury Court - Pankhurst">
-            <option value="Canterbury Court - Burgess">
-            <option value="Canterbury Court - Allworthy">
-            <option value="Canterbury Court - Bikeshed">
-            <option value="Alderley Park Block 3">
-            <option value="Eng B External Gas Store">
-            <option value="Active Travel Hub">
-            <option value="Alderley Park Block 14">
-            <option value="Alderley Park Block 12">
-            <option value="Alderley Park Block 41">
-            <option value="Alderley Park Block 18">
-            <option value="Alderley Park Block 33">
-            <option value="Leconfield Industrial Estate Unit 8 (Part)">
-            <option value="Alderley Park Block 8">
-            <option value="Alderley Park Block 13">
-            <option value="Christabel Pankhurst Institute">
-            <option value="Unsworth Park - Marsham">
-            <option value="Unsworth Park - Honey">
-            <option value="Unsworth Park - Tawny">
-            <option value="Unsworth Park - Heath">
-            <option value="Unsworth Park - Mason">
-            <option value="Unsworth Park - Bumble">
-            <option value="Unsworth Park - Carder">
-            <option value="Unsworth Park - Bilberry">
-            <option value="Unsworth Park - Energy Centre">
-            <option value="Unsworth Park - Substation North">
-            <option value="Unsworth Park - Substation South">
-            <option value="Electra House, NG 7">
-            <option value="Bright Building">
-            <option value="Rutherford Appleton Laboratory, Lab 02, Building R70">
-            <option value="Salford Innovation Forum">
-            <option value="Bathurst Street">
-            <option value="iQ Wilmslow Park">
-            <option value="Rusholme Place">
-            <option value="Unit 5">
-            <option value="William Pitt Industrial Estate">
-            <option value="Young Oncology Unit - Christie Hospital">
-            <option value="Main Building - Christie Hospital">
-            <option value="Oglesby Cancer Research Centre">
-            <option value="Paterson Building">
-            <option value="Barnes Building - Salford Royal Hospital">
-            <option value="Humphrey Booth Neurosciences - Salford Royal Hospital">
-            <option value="3T Scanner - Salford Royal Hospital">
-            <option value="Mayo Building (1) Block E Salford Royal Hospital">
-            <option value="Clinical Sciences Building (11) Salford Royal Hospital">
-            <option value="Summerfield House - Salford Royal Hospital">
-            <option value="Rawnsley Building - Manchester Royal Infirmary">
-            <option value="Harrington Building">
-            <option value="Main Building - Manchester Royal Eye Hospital">
-            <option value="University Research Floor">
-            <option value="Research and Education Centre - Wythenshawe Hospital">
-            <option value="Wellcome Clinical Research Facility">
-            <option value="Citylabs">
-                        <!-- Add more buildings as needed -->
-                    </datalist>
-                </div>
-                <div class="form-group">
-                    <label for="breakGlassTested">Which Break Glass Was Tested:</label>
-                    <input type="text" id="breakGlassTested" name="breakGlassTested" required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Did Outputs Operate?</label>
-                        <select id="outputsOperated" name="outputsOperated" required>
-                            <option value="">Select</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Was Signal to Security Received?</label>
-                        <select id="signalReceived" name="signalReceived" required>
-                            <option value="">Select</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="faults">Any Faults on Panel with Details:</label>
-                    <textarea id="faults" name="faults" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="comments">Comments:</label>
-                    <textarea id="comments" name="comments" rows="3"></textarea>
-                </div>
-                <button type="submit">Add Record</button>
             </form>
         </div>
 
-        <!-- Add Export Date Range Form -->
+        <!-- Export Form -->
         <div class="form-container">
             <h2>Export Records by Date Range</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate" name="startDate">
+            <form id="exportForm">
+                <table class="form-table">
+                    <tr>
+                        <td>
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate" name="startDate">
+                        </td>
+                        <td>
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" name="endDate">
+                        </td>
+                    </tr>
+                </table>
+                <div class="button-container">
+                    <button id="exportCsvButton" type="button">Export CSV</button>
                 </div>
-                <div class="form-group">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate" name="endDate">
-                </div>
-            </div>
-            <button id="exportCsvButton">Export CSV</button>
+            </form>
         </div>
 
-        <div class="table-container">
-            <table id="recordsTable">
+        <!-- Records Table -->
+        <div class="records-table-container">
+            <table class="records-table" id="recordsTable">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -651,6 +642,11 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2024 
     </div>
 
     <!-- Initialize Firebase and your scripts -->
@@ -724,7 +720,6 @@
                         var record = doc.data();
                         addRecordToTable(record);
                     });
-                    updateCSVOutput();
                 })
                 .catch(function(error) {
                     console.log("Error getting documents: ", error);
@@ -753,11 +748,6 @@
             cellSignal.textContent = record.signalReceived;
             cellFaults.textContent = record.faults || '';
             cellComments.textContent = record.comments || '';
-        }
-
-        // Function to update CSV output
-        function updateCSVOutput() {
-            // Existing code (if needed)
         }
 
         // Handle form submission
@@ -796,7 +786,6 @@
                 .then(function(docRef) {
                     console.log("Document written with ID: ", docRef.id);
                     addRecordToTable(record);
-                    // Optionally update CSV output
                 })
                 .catch(function(error) {
                     console.error("Error adding document: ", error);
@@ -868,6 +857,8 @@
         }
     </script>
 </body>
+</html>
+
 </html>
 
 
